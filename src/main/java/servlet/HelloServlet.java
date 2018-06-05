@@ -9,7 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-@WebServlet(name="helloServlet",value={"/helloServlet"},initParams={@WebInitParam(name="username",value="suqc")})
+//@WebServlet(name="helloServlet",value={"/helloServlet"},initParams={@WebInitParam(name="username",value="suqc")})
 public class HelloServlet extends HttpServlet{
    private static final long serialVersionUID = 8332497227665487689L;
 
@@ -27,6 +27,8 @@ public class HelloServlet extends HttpServlet{
         System.out.println(req.getRequestURI());//    /TestWeb/helloServlet
         System.out.println(req.getQueryString());//   name=suqc
         System.out.println(req.getServletContext().getRealPath("/helloServlet"));//   E:\apache-tomcat-7.0.67\webapps\TestWeb\helloServlet
+        System.out.println(req.getPathInfo());//
+        System.out.println(req.getMethod());//  GET
         req.setAttribute("name", req.getParameter("name"));
         req.getRequestDispatcher("/index.jsp").forward(req, resp);
    }
