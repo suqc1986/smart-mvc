@@ -3,6 +3,8 @@ package servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletConfig;
@@ -11,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.dom4j.Document;
+import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import annotation.Controller;
@@ -34,20 +38,16 @@ public class DispatcherServlet extends HttpServlet{
       SAXReader reader = new SAXReader();
       InputStream in = getClass().getClassLoader().getResourceAsStream(configPath);
       try {
-//         Document doc = reader.read(in);
-//         Element root = doc.getRootElement();
-//         List<Object> beans = new ArrayList<>();
-//         @SuppressWarnings("unchecked")
-//         List<Element> subList = root.elements();
-//         for(Element element:subList){
-//            String className = element.attribute("class").getValue();
-//            beans.add(Class.forName(className).newInstance());
-//         }
-         Scanner scan = new Scanner();
-         Set<Class<Controller>> clazzs = scan.getControllers("controller");
-         for(Class<Controller> clazz:clazzs){
-            mapping.process(clazz.newInstance());
+         Document doc = reader.read(in);
+         Element root = doc.getRootElement();
+         List<Object> beans = new ArrayList<>();
+         @SuppressWarnings("unchecked")
+         List<Element> subList = root.elements();
+         for(Element element:subList){
+            String className = element.attribute("class").getValue();
+            beans.add(Class.forName(className).newInstance());
          }
+         mapping.process(beans);
       } catch (Exception e) {
          e.printStackTrace();
       }
